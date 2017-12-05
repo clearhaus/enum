@@ -6,7 +6,8 @@ A Ruby gem providing an `Enum` class.
 
 ```ruby
 class Footwear
-  type = Enum.new [:shoe, :sandal, :boot], do
+  attr_reader :type
+  @type = Enum.new [:shoe, :sandal, :boot], do
     def decide(text)
       case text
       when /sandal/i then :sandal
