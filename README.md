@@ -33,4 +33,10 @@ class Footwear
     type.shoe? or type.boot?
   end
 end
+
+shoe_a = Footwear.new; shoe_a.type.shoe!
+shoe_b = Footwear.new; shoe_b.type.shoe!
+
+shoe_a.type == shoe_b.type
+#=> true
 ```
