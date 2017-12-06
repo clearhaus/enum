@@ -3,14 +3,9 @@ class Enum
 
   attr_reader :symbols
 
-  def initialize(symbols, &block)
+  def initialize(symbols)
     raise Enum::Error, 'All symbols must be symbols' unless symbols.all?{|v| v.is_a?(Symbol)}
     raise Enum::Error, 'Values must be unique' unless symbols.uniq == symbols
-
-    if block_given?
-      binding.pry
-      yield
-    end
 
     @symbols = symbols.freeze
 
