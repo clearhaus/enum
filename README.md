@@ -2,41 +2,74 @@
 
 A Ruby gem providing an `Enum` class.
 
-## Example
+## Simple example
+
+```ruby
+class Fruit
+  attr_reader :type
+  def initialize
+    @type = Enum.new [:apple, :banana, :melon]
+  end
+
+  def price
+    case type.to_sym
+    when :apple  then  '2 DKK'
+    when :banana then  '3 DKK'
+    when :melon  then '15 DKK'
+    end
+  end
+end
+
+a = Fruit.new
+a.type.apple!
+#=> :apple
+
+a.type.apple?
+#=> true
+
+a.type.banana?
+#=> false
+
+a.price
+#=> "2 DKK"
+```
+
+## Advanced example
 
 ```ruby
 class Footwear
   attr_reader :type
-  @type = Enum.new [:shoe, :sandal, :boot], do
-    def decide(text)
-      case text
-      when /sandal/i then :sandal
-      when /boot/i   then :boot
-      else :shoe
+  def initialize
+    @type = Class.new(Enum) do
+      def decide(text)
+        self.sym = case text
+                   when /sandal/i then :sandal
+                   when /boot/i   then :boot
+                   else :shoe
+                   end
       end
-    end
-  end
-
-  def congrats
-    "Congratulations with your new #{type.to_s}s"
+    end.new [:shoe, :sandal, :boot]
   end
 
   def price
-    case type
-    when :shoe    then '100 USD'
-    when :sandsal then  '75 USD'
-    when :boot    then  '50 USD'
+    case type.to_sym
+    when :shoe then '100 EUR'
+    else '50 EUR'
     end
   end
 
   def laces?
-    type.shoe? or type.boot?
+    type.shoe?
   end
 end
 
-shoe_a = Footwear.new; shoe_a.type.shoe!
-shoe_b = Footwear.new; shoe_b.type.shoe!
+f = Footwear.new
+f.type.decide('Nice boots!')
+#=> :boot
 
-shoe_a.type == shoe_b.type
-#=> true
+f.price
+#=> "50 EUR"
+
+f.laces?
+#=> false
 ```
